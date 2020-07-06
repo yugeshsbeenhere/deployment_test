@@ -1,0 +1,9 @@
+flask-cors
+numpy
+sklearn
+string
+re
+nltk
+pandas
+flask
+gunicorn
