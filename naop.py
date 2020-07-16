@@ -2,7 +2,6 @@ import pandas as pd
 #import numpy as np
 import string
 import re
-from nltk.corpus import stopwords
 from sklearn.utils import resample
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.ensemble import RandomForestClassifier
@@ -37,13 +36,19 @@ def remove_html(text):
     return html.sub(r'',text)
 train['Posts']=train['Posts'].apply(lambda x: remove_html(x))
 
-STOPWORDS = set(stopwords.words('english'))
-def clean_text(text):
-    text = text.lower() 
-    text = ' '.join(word for word in text.split() if word not in STOPWORDS) # remove stopwors from text
-    return text
-train['Posts']=train['Posts'].apply(lambda x: clean_text(x))
+stop_words = []
+with open("stop.txt") as f:
+    stop_words = f.read()
+    
 
+def cleaning_text(i):
+    w = []
+    for word in i.split(" "):
+        if len(word)>3:
+            w.append(word)
+    return (" ".join(w))
+
+train.Posts = train.Posts.apply(cleaning_text)
 A_class = train[train.Type=='A']
 B_class = train[train.Type=='B']
 C_class = train[train.Type=='C']
